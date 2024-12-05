@@ -4,21 +4,24 @@ import java_cup.runtime.*;
 
 %%
 
-%class Lexer
-%public 
-%line 
-%char 
-%cup 
-%unicode
-%ignorecase
 
 %init{ 
     yyline = 1; 
     yychar = 1; 
 %init} 
 
-//TOKENS
+%cup 
+%class Lexer
+%public 
+%line 
+%char
+%column 
+%debug
+%full
+%ignorecase
 
+
+//TOKENS
 BLANCOS=[ \r\t]+
 ENTERO=[0-9]+
 DECIMAL=[0-9]+(\.[0-9]+)?
@@ -83,7 +86,7 @@ CADENA=\"([^\"\\]|\\[btnfr\"\'\\])*\"
 
 //COMENTARIOS
 "//".* { /* Ignorar comentarios de una línea */ }
-"/*"([^*]|[\r\n]|"*"[^/])*"*/" { /* Ignorar comentarios multilínea */ }
+"/"([^*]|[\r\n]|"*"[^/])*"/" { /* Ignorar comentarios multilínea */ }
 
 \n { yyline++; yychar = 1; }
 
