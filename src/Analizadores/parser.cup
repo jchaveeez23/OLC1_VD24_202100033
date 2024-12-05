@@ -1,1 +1,54 @@
 package Analizadores;
+import java_cup.runtime.*;
+
+parser code 
+{:
+    /**
+     * Método al que se llama automáticamente ante algún error sintactico.
+     **/ 
+    public void syntax_error(Symbol s){ 
+        System.out.println("Error Sintáctico en la Línea " + (s.left) +
+        " Columna "+s.right+ ". No se esperaba este componente: " +s.value+"."); 
+    } 
+
+    /**
+     * Método al que se llama automáticamente ante algún error sintáctico 
+     * en el que ya no es posible una recuperación de errores.
+     **/ 
+    public void unrecovered_syntax_error(Symbol s) throws java.lang.Exception{ 
+        System.out.println("Error síntactico irrecuperable en la Línea " + 
+        (s.left)+ " Columna "+s.right+". Componente " + s.value + 
+        " no reconocido."); 
+    }  
+
+// TERMINALES TIPO DE DATOS
+terminal String INT, DOUBLE, BOOL, CHAR, STRING;
+terminal ASIGNACION;
+
+// TERMINALES PALABRAS RESERVADAS
+terminal String LET, CONST, CAST, IF, MATCH, DEFAULT, WHILE, DO, BREAK, CONTINUE;
+
+// TERMINALES OPERADORES ARITMETICOS
+terminal String SUMA, RESTA, MULTIPLICACION, DIVISION, POTENCIA, RAIZ, MODULO; //falta la unaria
+
+//TERMINALES OPERADORES RELACIONALES
+terminal String IGUALDAD, DIFERENTE, MENOR, MAYOR, MENOR_IGUAL, MAYOR_IGUAL;
+
+//TERMINALES OPERADORES LOGICOS
+terminal String OR, AND, NOT;
+
+//TERMINALES INCREMENTO Y DECREMENTO
+terminal String INCREMENTO, DECREMENTO;
+
+// TERMINALES DELIMITADORES
+terminal String PARL, PARD, LLAVL, LLAVD, CORL, CORD, PTCOMA, COMA;
+
+// TERMIANLES ER
+terminal String ENTERO, DECIMAL, ID, CADENA, CARACTER, TRUE, FALSE;
+
+//ERROR
+terminal String ERROR;
+
+
+
+

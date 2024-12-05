@@ -40,6 +40,7 @@ CADENA=\"([^\"\\]|\\[btnfr\"\'\\])*\"
 "cast" { return new Symbol(sym.CAST, yyline, yychar, yytext()); }
 "if" { return new Symbol(sym.IF, yyline, yychar, yytext()); }
 "match" { return new Symbol(sym.MATCH, yyline, yychar, yytext()); }
+"default" { return new Symbol(sym.DEFAULT, yyline, yychar, yytext()); }
 "while" { return new Symbol(sym.WHILE, yyline, yychar, yytext()); }
 "do" { return new Symbol(sym.DO, yyline, yychar, yytext()); }
 "++" { return new Symbol(sym.INCREMENTO, yyline, yychar, yytext()); }
