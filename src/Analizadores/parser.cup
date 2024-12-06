@@ -1,285 +1,56 @@
 package Analizadores;
-import java_cup.runtime.*;
+import java_cup.runtime.Symbol;
 
-parser code 
+parser code
 {:
-   
-    public void syntax_error(Symbol s){ 
-        System.out.println("Error Sintáctico en la Línea " + (s.left) +
-        " Columna "+s.right+ ". No se esperaba este componente: " +s.value+"."); 
-    } 
+    public void syntax_error(Symbol s){
+        System.out.println("Error sintactico Recuperable");
+    }
 
-
-    public void unrecovered_syntax_error(Symbol s) throws java.lang.Exception{ 
-        System.out.println("Error síntactico irrecuperable en la Línea " + 
-        (s.left)+ " Columna "+s.right+". Componente " + s.value + 
-        " no reconocido."); 
-    }  
+    public void unrecovered_syntax_error(Symbol s){
+        System.out.println("Error sintactico No Recuperable");
+    }
 :}
 
 action code
 {:
-    //Funcion para validar si una suma es válida
-     boolean esSumaValida(String tipo1, String tipo2) {
-        if (tipo1.equals("Entero") && (tipo2.equals("Entero") || tipo2.equals("Decimal") || tipo2.equals("Booleano") || tipo2.equals("Carácter") || tipo2.equals("Cadena"))) return true;
-        if (tipo1.equals("Decimal") && (tipo2.equals("Entero") || tipo2.equals("Decimal") || tipo2.equals("Booleano") || tipo2.equals("Carácter") || tipo2.equals("Cadena"))) return true;
-        if (tipo1.equals("Booleano") && (tipo2.equals("Entero") || tipo2.equals("Decimal") || tipo2.equals("Cadena"))) return true;
-        if (tipo1.equals("Carácter") && (tipo2.equals("Entero") || tipo2.equals("Decimal") || tipo2.equals("Cadena"))) return true;
-        if (tipo1.equals("Cadena")) return true; // Cadena permite concatenación con cualquier tipo
-        return false; // Cualquier otra combinación no es válida
-    }
-
-    // Función para determinar el tipo del resultado de la suma
-    String obtenerTipoResultado(String tipo1, String tipo2) {
-        if (tipo1.equals("Cadena") || tipo2.equals("Cadena")) return "Cadena"; // Concatenación
-        if (tipo1.equals("Decimal") || tipo2.equals("Decimal")) return "Decimal"; // Si hay un decimal, el resultado es decimal
-        return "Entero"; // En otros casos, el resultado es entero
-    }
-    
-    // Función para realizar la suma según los tipos
-    String realizarSuma(Object valor1, Object valor2, String tipo1, String tipo2) {
-        if (tipo1.equals("Cadena") || tipo2.equals("Cadena")) {
-            return valor1.toString() + valor2.toString(); // Concatenación
-        }
-        if (tipo1.equals("Decimal") || tipo2.equals("Decimal")) {
-            return Double.parseDouble(valor1.toString()) + Double.parseDouble(valor2.toString());
-        }
-        if (tipo1.equals("Entero")) {
-            return Integer.parseInt(valor1.toString()) + Integer.parseInt(valor2.toString());
-        }
-        throw new RuntimeException("Suma no implementada para " + tipo1 + " y " + tipo2);
-    }
-
-    // Función para validar si una resta es válida 
-    boolean esRestaValida(String tipo1, String tipo2) {
-        if (tipo1.equals("Entero") && (tipo2.equals("Entero") || tipo2.equals("Decimal") || tipo2.equals("Carácter"))) return true;
-        if (tipo1.equals("Decimal") && (tipo2.equals("Entero") || tipo2.equals("Decimal") || tipo2.equals("Carácter"))) return true;
-        if (tipo1.equals("Carácter") && (tipo2.equals("Entero") || tipo2.equals("Decimal"))) return true;
-        return false; // Cualquier otra combinación no es válida
-    }
-
-    // Función para determinar el tipo del resultado de la resta
-    String obtenerTipoResultadoResta(String tipo1, String tipo2) {
-        if (tipo1.equals("Decimal") || tipo2.equals("Decimal")) return "Decimal"; // Si hay un decimal, el resultado es decimal
-        return "Entero"; // En otros casos, el resultado es entero
-    }
-
-    // Función para realizar la resta según los tipos
-    String realizarResta(Object valor1, Object valor2, String tipo1, String tipo2) {
-        if (tipo1.equals("Decimal") || tipo2.equals("Decimal")) {
-            return Double.parseDouble(valor1.toString()) - Double.parseDouble(valor2.toString());
-        }
-        if (tipo1.equals("Entero") || tipo2.equals("Carácter")) {
-            return Integer.parseInt(valor1.toString()) - Integer.parseInt(valor2.toString());
-        }
-        throw new RuntimeException("Resta no implementada para " + tipo1 + " y " + tipo2);
-    }
-
-    //MULTIPLICACION
-    boolean esMultiplicacionValida(String tipo1, String tipo2) {
-        // Combinaciones válidas según la tabla
-        if (tipo1.equals("Entero") && (tipo2.equals("Entero") || tipo2.equals("Decimal") || tipo2.equals("Carácter"))) return true;
-        if (tipo1.equals("Decimal") && (tipo2.equals("Entero") || tipo2.equals("Decimal") || tipo2.equals("Carácter"))) return true;
-        if (tipo1.equals("Carácter") && (tipo2.equals("Entero") || tipo2.equals("Decimal"))) return true;
-        return false; // Cualquier otra combinación no es válida
-    }
-
-    String obtenerTipoResultadoMultiplicacion(String tipo1, String tipo2) {
-        if (tipo1.equals("Decimal") || tipo2.equals("Decimal")) return "Decimal"; // Si hay un decimal, el resultado es decimal
-        return "Entero"; // En otros casos, el resultado es entero
-    }
-
-    String realizarMultiplicacion(Object valor1, Object valor2, String tipo1, String tipo2) {
-    if (tipo1.equals("Decimal") || tipo2.equals("Decimal")) {
-            return Double.parseDouble(valor1.toString()) * Double.parseDouble(valor2.toString());
-        }
-        if (tipo1.equals("Entero") || tipo2.equals("Carácter")) {
-            return Integer.parseInt(valor1.toString()) * Integer.parseInt(valor2.toString());
-        }
-        throw new RuntimeException("Multiplicación no implementada para " + tipo1 + " y " + tipo2);
-    }
+   /*acciones*/
 :}
 
 // **DECLARACION DE TERMINALES**
+//TERMINALES PALABRAS RESERVADAS
+terminal String INT, DOUBLE, BOOL, CHAR, STRING, TRUE, FALSE, CONST, LET, CAST, IF, MATCH, DEFAULT, WHILE, DO, BREAK, CONTINUE;
 
-// TERMINALES TIPO DE DATOS
-terminal String INT, DOUBLE, BOOL, CHAR, STRING;
-terminal String ASIGNACION;
-
-// TERMINALES PALABRAS RESERVADAS
-terminal String LET, CONST, CAST, IF, MATCH, DEFAULT, WHILE, DO, BREAK, CONTINUE;
-
-// TERMINALES OPERADORES ARITMETICOS
-terminal String SUMA, RESTA, MULTIPLICACION, DIVISION, POTENCIA, RAIZ, MODULO; //falta la unaria
-
-//TERMINALES OPERADORES RELACIONALES
-terminal String IGUALDAD, DIFERENTE, MENOR, MAYOR, MENOR_IGUAL, MAYOR_IGUAL;
-
-//TERMINALES OPERADORES LOGICOS
-terminal String OR, AND, NOT;
-
-//TERMINALES INCREMENTO Y DECREMENTO
+// TERMINALES OPERADORES
+terminal String SUMA, RESTA, MULTIPLICACION, DIVISION, POTENCIA, RAIZ, MODULO,IGUALDAD, DIFERENTE, MENOR, MAYOR, MENOR_IGUAL, MAYOR_IGUAL,OR, AND, NOT, ASIGNACION;
+terminal String MENOS_UNARIO;
+//TERMINALES ++ o --
 terminal String INCREMENTO, DECREMENTO;
 
-// TERMINALES DELIMITADORES
-terminal String PARL, PARD, LLAVL, LLAVD, CORL, CORD, PTCOMA, COMA;
+//TERMINALES DELIMITADORES
+terminal String PARL, PARD, LLAVL, LLAVD, CORL, CORD, PTCOMA, COMA,DOSPTOS;
 
-// TERMIANLES ER
-terminal String ENTERO, DECIMAL, ID, CADENA, CARACTER, TRUE, FALSE;
+//TERMINALES TIPOS DE DATOS
+terminal String ENTERO, DECIMAL, ID, CARACTER, CADENA;
 
-//ERROR
-terminal String ERROR;
+
 
 // **DECLARACION NO TERMINALES**
-non terminal String Programa;
-non terminal String Declaracion;
-non terminal String TipoDato;
-non terminal String Expresion;
-non terminal String Instruccion;
-non terminal String Bloque;
-non terminal String Condicion;
-non terminal String Bucle;
-non terminal String Operador;
-non terminal String ListaInstrucciones;
+non terminal String programa, declaracion, bloque, instruccion, condicional, bucle, expresion, parametros, tipo, constante;
+
+// **PRECEDENCIAS**
+precedence left OR, AND, IGUALDAD, DIFERENTE, MENOR, MAYOR, MENOR_IGUAL, MAYOR_IGUAL;
+precedence left SUMA, RESTA;
+precedence left MULTIPLICACION, DIVISION;
+precedence nonassoc POTENCIA, RAIZ;
+precedence right MENOS_UNARIO;
 
 // **PRODUCCIONES**
+start with programa;
 
-Programa ::=
-    ListaInstrucciones
-    ;
+programa ::= declaracion;
 
-ListaInstrucciones ::=
-    Instruccion
-    |
-    ListaInstrucciones Instruccion
-    ;
-
-Instruccion ::=
-    Declaracion
-    |
-    Expresion PTCOMA
-    |
-    Bloque
-    |
-    Condicion
-    |
-    Bucle
-    ;
-
-Declaracion ::=
-    LET ID ":" TipoDato ";"
-        {: System.out.println("Variable declarada: " + $2 + " de tipo " + $4); :}
-    |
-    LET ID ":" TipoDato "=" Expresion ";"
-        {: System.out.println("Variable inicializada: " + $2 + " de tipo " + $4 + " con valor " + $6); :}
-    |
-    CONST ID ":" TipoDato "=" Expresion ";"
-        {: System.out.println("Constante declarada: " + $2 + " de tipo " + $4 + " con valor " + $6); :}
-    ;
-
-TipoDato ::=
-    INT
-        {: RESULT = "Entero"; :}
-    |
-    DOUBLE
-        {: RESULT = "Decimal"; :}
-    |
-    BOOL
-        {: RESULT = "Booleano"; :}
-    |
-    CHAR
-        {: RESULT = "Carácter"; :}
-    |
-    STRING
-        {: RESULT = "Cadena"; :}
-    ;
-
-Expresion ::=
-    Expresion SUMA Expresion
-        {:
-            // Validación semántica para suma
-            String tipo1 = $1.tipo;
-            String tipo2 = $3.tipo;
-            if (esSumaValida(tipo1, tipo2)) {
-                RESULT = realizarSuma($1.valor, $3.valor, tipo1, tipo2);
-                RESULT.tipo = obtenerTipoResultado(tipo1, tipo2);
-            } else {
-                throw new Exception("Error de tipo: No se puede sumar " + tipo1 + " y " + tipo2);
-            }
-        :}
-    |
-    Expresion RESTA Expresion
-         {:
-            String tipo1 = $1.tipo;
-            String tipo2 = $3.tipo;
-            if (esRestaValida(tipo1, tipo2)) {
-                RESULT = realizarResta($1.valor, $3.valor, tipo1, tipo2);
-                RESULT.tipo = obtenerTipoResultadoResta(tipo1, tipo2);
-            } else {
-                throw new Exception("Error de tipo: No se puede restar " + tipo1 + " y " + tipo2);
-            }
-        :}
-    |
-    Expresion MULTIPLICACION Expresion
-        {:
-            String tipo1 = $1.tipo;
-            String tipo2 = $3.tipo;
-            if (esMultiplicacionValida(tipo1, tipo2)) {
-                RESULT = realizarMultiplicacion($1.valor, $3.valor, tipo1, tipo2);
-                RESULT.tipo = obtenerTipoResultadoMultiplicacion(tipo1, tipo2);
-            } else {
-                throw new Exception("Error de tipo: No se puede multiplicar " + tipo1 + " y " + tipo2);
-            }
-        :}
-    |
-    ID INCREMENTO
-        {:
-            System.out.println($1 + " incrementado.");
-        :}
-    |
-    ID DECREMENTO
-        {:
-            System.out.println($1 + " decrementado.");
-        :}
-    |
-    PARL Expresion PARD
-        {: RESULT = $2; :}
-    |
-    ENTERO
-        {: RESULT = $1; RESULT.tipo = "Entero"; :}
-    |
-    DECIMAL
-        {: RESULT = $1; RESULT.tipo = "Decimal"; :}
-    |
-    CADENA
-        {: RESULT = $1; RESULT.tipo = "Cadena"; :}
-    |
-    CARACTER
-        {: RESULT = $1; RESULT.tipo = "Carácter"; :}
-    |
-    TRUE
-        {: RESULT = true; RESULT.tipo = "Booleano"; :}
-    |
-    FALSE
-        {: RESULT = false; RESULT.tipo = "Booleano"; :}
-    ;
-
-Bloque ::=
-    LLAVL ListaInstrucciones LLAVD
-    ;
-
-Condicion ::=
-    IF PARL Expresion PARD Bloque
-    ;
-
-Bucle ::=
-    WHILE PARL Expresion PARD Bloque
-    |
-    DO Bloque WHILE PARL Expresion PARD PTCOMA
-    ;
-
-
-
-
-
+declaracion ::= INT ID PTCOMA
+              | DOUBLE ID PTCOMA
+              | BOOL ID PTCOMA;
 

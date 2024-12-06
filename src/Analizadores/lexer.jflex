@@ -1,33 +1,32 @@
 package Analizadores;
-import java_cup.runtime.Symbol;
 import java_cup.runtime.*;
 
 %%
 
-
-%init{ 
-    yyline = 1; 
-    yychar = 1; 
-%init} 
+%init{
+    yyline = 1;
+    yycolumn = 1;
+%init}
 
 %cup 
-%class Lexer
+%class scanner 
 %public 
 %line 
-%char
+%char 
 %column 
-%debug
-%full
+%full 
+%debug 
 %ignorecase
 
 
-//TOKENS
-BLANCOS=[ \r\t]+
-ENTERO=[0-9]+
-DECIMAL=[0-9]+(\.[0-9]+)?
-ID=[a-zA-Z_][a-zA-Z0-9_]*
-CARACTER=\'([^\'\\]|\\[btnfr\"\'\\])*\' 
-CADENA=\"([^\"\\]|\\[btnfr\"\'\\])*\" 
+BLANCOS= [ \r\t]+
+ENTERO= [0-9]+
+DECIMAL= [0-9]+(\.[0-9]+)?
+ID= [a-zA-Z_][a-zA-Z0-9_]*
+CARACTER= \'(\\\\.|[^\\\\])\'
+CADENA= \"(\\\\.|[^\"\\\\])*\" 
+
+
 %%
 
 //RESERVADAS
@@ -72,7 +71,7 @@ CADENA=\"([^\"\\]|\\[btnfr\"\'\\])*\"
 //OPERADORES LOGICOS
 "||" { return new Symbol(sym.OR, yyline, yychar, yytext()); }
 "&&" { return new Symbol(sym.AND, yyline, yychar, yytext()); }
-"!  " { return new Symbol(sym.NOT, yyline, yychar, yytext()); }
+"!" { return new Symbol(sym.NOT, yyline, yychar, yytext()); }
 
 //DELIMITADORES
 "(" {return new Symbol(sym.PARL,yyline,yychar, yytext());}
@@ -82,7 +81,9 @@ CADENA=\"([^\"\\]|\\[btnfr\"\'\\])*\"
 "[" {return new Symbol(sym.CORL,yyline,yychar, yytext());} 
 "]" {return new Symbol(sym.CORD,yyline,yychar, yytext());} 
 ";" {return new Symbol(sym.PTCOMA,yyline,yychar, yytext());} 
-"," {return new Symbol(sym.COMA,yyline,yychar, yytext());} 
+"," {return new Symbol(sym.COMA,yyline,yychar, yytext());}
+":" { return new Symbol(sym.DOSPTOS, yyline, yychar, yytext()); }
+ 
 
 //COMENTARIOS
 "//".* { /* Ignorar comentarios de una línea */ }
